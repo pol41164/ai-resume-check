@@ -1,26 +1,158 @@
 @import "tailwindcss";
 
+/* "Red pen on paper": warm paper, ink text, vermilion markup, green fixes. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f5f0e6;
+  --paper-raised: #fffcf6;
+  --paper-sunken: #ece5d7;
+  --ink: #1b1814;
+  --ink-soft: #5d554a;
+  --ink-faint: #8f8676;
+  --line: #ddd4c4;
+  --pen: #cf3f1d;
+  --pen-soft: #f9e1d6;
+  --fix: #1d6a4d;
+  --fix-soft: #dbeee3;
+  --marker: #f6dd6b;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #15130f;
+    --paper-raised: #1e1b16;
+    --paper-sunken: #110f0c;
+    --ink: #f2ede4;
+    --ink-soft: #b3aa9b;
+    --ink-faint: #7e7668;
+    --line: #322d26;
+    --pen: #ff6b47;
+    --pen-soft: #3a1d14;
+    --fix: #63c99c;
+    --fix-soft: #13291f;
+    --marker: #5e4f14;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunken: var(--paper-sunken);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-pen: var(--pen);
+  --color-pen-soft: var(--pen-soft);
+  --color-fix: var(--fix);
+  --color-fix-soft: var(--fix-soft);
+  --color-marker: var(--marker);
+  --font-sans: var(--font-geist-sans), var(--font-noto-sans), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-serif: var(--font-noto-serif), ui-serif, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--marker);
+  color: var(--ink);
+}
+
+/* Faint ruled-paper texture for hero areas. */
+.ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    color-mix(in oklab, var(--line) 55%, transparent) 31px,
+    color-mix(in oklab, var(--line) 55%, transparent) 32px
+  );
+}
+
+/* Highlighter swipe behind quoted resume text. */
+.marker {
+  background: linear-gradient(
+    to bottom,
+    transparent 55%,
+    color-mix(in oklab, var(--marker) 85%, transparent) 55%
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.pen-strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--pen);
+  text-decoration-thickness: 2px;
+}
+
+.pen-wavy {
+  text-decoration: underline wavy;
+  text-decoration-color: var(--pen);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-10%);
+  }
+  100% {
+    transform: translateY(1100%);
+  }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.draw {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: draw 1.1s 0.6s ease-out forwards;
+}
+
+.scan {
+  animation: scan 2.4s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise,
+  .scan {
+    animation: none;
+  }
+  .draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
